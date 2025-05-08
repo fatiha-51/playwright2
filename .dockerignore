@@ -1,0 +1,12 @@
+.git
+node_modules
+.env
+*.md
+.DS_Store
+docker-compose*
+**/__pycache__
+**/.next
+**/.cache
+**/*.log
+**/test-results
+**/playwright-report
