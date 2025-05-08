@@ -2,8 +2,10 @@ FROM mcr.microsoft.com/playwright:v1.44.0
 
 WORKDIR /app
 
-COPY package.json ./
-RUN npm install
+ENV PLAYWRIGHT_BROWSERS_PATH=0
+
+COPY package*.json ./
+RUN npm ci
 
 COPY index.js ./
 
