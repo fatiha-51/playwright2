@@ -1,8 +1,13 @@
-version: "3.8"
+FROM mcr.microsoft.com/playwright:v1.44.0
 
-services:
-  playwright-api:
-    build: .
-    ports:
-      - "82:3000"
-    restart: unless-stopped
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install
+RUN npx playwright install
+
+COPY index.js ./
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]
