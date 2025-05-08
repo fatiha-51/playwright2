@@ -1,14 +1,27 @@
-FROM mcr.microsoft.com/playwright:v1.44.0
+version: '3.8'
 
-WORKDIR /app
+services:
+  playwright-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: playwright-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+      - CI=true
+      - PLAYWRIGHT_BROWSERS_PATH=0
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - playwright-network
 
-ENV PLAYWRIGHT_BROWSERS_PATH=0
-
-COPY package*.json ./
-RUN npm ci
-
-COPY index.js ./
-
-EXPOSE 3000
-
-CMD ["node", "index.js"]
+networks:
+  playwright-network:
+    driver: bridge
